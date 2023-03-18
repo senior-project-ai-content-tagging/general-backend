@@ -1,4 +1,6 @@
-package me.ponlawat.infrastructure.provider;
+package me.ponlawat.infrastructure.provider.http;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -9,10 +11,7 @@ public class HttpErrorExceptionMapper implements ExceptionMapper<HttpErrorExcept
     @Override
     public Response toResponse(HttpErrorException exception) {
         ErrorResponse response = new ErrorResponse(exception.getMessage());
+
         return Response.ok(response).status(exception.getHttpStatus()).build();
     }
 }
-
-record ErrorResponse(
-        String errorMessage
-) {}
