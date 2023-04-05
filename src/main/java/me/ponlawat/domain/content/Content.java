@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import me.ponlawat.domain.category.Category;
 import me.ponlawat.domain.user.User;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "contents")
@@ -26,15 +28,30 @@ public class Content {
     @Column(name = "original_url")
     private String originalUrl;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "title_th")
+    private String title_th;
 
-    @Column(name = "content")
+    @Column(name = "content_th")
     @Type(type = "org.hibernate.type.TextType")
-    private String content;
+    private String content_th;
+
+    @Column(name = "title_en")
+    private String title_en;
+
+    @Column(name = "content_en")
+    @Type(type = "org.hibernate.type.TextType")
+    private String content_en;
 
     @Column(name = "identifier", length = 64)
     private String identifier;
+
+    @ManyToMany
+    @JoinTable(
+            name = "contents_categories",
+            joinColumns = @JoinColumn(name="content_id"),
+            inverseJoinColumns = @JoinColumn(name="category_id")
+    )
+    private Set<Category> categories;
     
     @Override
     public boolean equals(Object o) {

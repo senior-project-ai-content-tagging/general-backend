@@ -50,6 +50,5 @@ jobs:
         project_id: ${{ env.PROJECT_ID }}
         platform: managed
         max_instances: 1
-        memory: 256Mi
         timeout: 300
 

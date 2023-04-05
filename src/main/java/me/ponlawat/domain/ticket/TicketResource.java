@@ -1,5 +1,6 @@
 package me.ponlawat.domain.ticket;
 
+import me.ponlawat.domain.ticket.dto.TicketResponse;
 import me.ponlawat.domain.ticket.dto.TicketWeblinkRequest;
 import me.ponlawat.domain.ticket.dto.TicketWeblinkResponse;
 import me.ponlawat.domain.user.User;
@@ -8,11 +9,10 @@ import me.ponlawat.infrastructure.auth.JwtToken;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/tickets")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -30,5 +30,13 @@ public class TicketResource {
         User user = auth.getUser();
 
         return ticketService.submitWeblink(user, ticketWeblinkRequest);
+    }
+
+    @GET
+    @Path("")
+    public List<TicketResponse> myTicket() {
+        User user = auth.getUser();
+
+        return ticketService.getTicketByUser(user).stream().map(ticket -> TicketResponse.fromTicket(ticket)).collect(Collectors.toList());
     }
 }

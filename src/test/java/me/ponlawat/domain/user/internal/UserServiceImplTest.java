@@ -1,6 +1,5 @@
 package me.ponlawat.domain.user.internal;
 
-import io.quarkus.test.junit.QuarkusTest;
 import me.ponlawat.domain.user.User;
 import me.ponlawat.domain.user.UserRepository;
 import me.ponlawat.domain.user.UserRole;
