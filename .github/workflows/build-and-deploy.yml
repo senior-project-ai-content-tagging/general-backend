@@ -6,7 +6,6 @@ on:
       - master
 
 env:
-  PROJECT_ID: senior-project-364818
   SERVICE_NAME: general-backend
   REGION: asia-east1
   CONTAINER_REGISTRY: gcr.io/${{ env.PROJECT_ID }}
