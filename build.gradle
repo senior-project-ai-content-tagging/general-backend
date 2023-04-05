@@ -9,6 +9,9 @@ repositories {
 }
 
 dependencies {
+    implementation 'io.quarkiverse.loggingjson:quarkus-logging-json:2.0.0'
+    implementation 'io.quarkiverse.googlecloudservices:quarkus-google-cloud-pubsub'
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:quarkus-google-cloud-services-bom:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-container-image-jib'
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-hibernate-orm-panache'
@@ -21,7 +24,8 @@ dependencies {
     implementation 'io.quarkus:quarkus-smallrye-jwt'
     implementation 'io.quarkus:quarkus-smallrye-jwt-build'
     implementation 'de.mkammerer:argon2-jvm:2.11'
-    compileOnly 'org.projectlombok:lombok:1.18.24'
+    implementation("org.jboss.logmanager:log4j2-jboss-logmanager")
+    compileOnly 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.24'

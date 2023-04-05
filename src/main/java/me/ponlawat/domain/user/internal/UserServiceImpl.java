@@ -13,7 +13,8 @@ import me.ponlawat.domain.user.exception.UserUnauthorizedException;
 import me.ponlawat.infrastructure.auth.AuthToken;
 import me.ponlawat.infrastructure.crypto.PasswordEncrypter;
 import me.ponlawat.infrastructure.provider.http.HttpErrorException;
-import org.jboss.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Inject
     AuthToken auth;
 
-    private static final Logger LOG = Logger.getLogger(UserServiceImpl.class);
+    private static final Logger LOG = LogManager.getLogger(UserServiceImpl.class);
 
     @Override
     @Transactional
@@ -43,7 +44,6 @@ public class UserServiceImpl implements UserService {
         }
 
         String hashedPassword = passwordEncrypter.hash(userRegisterRequest.getPassword());
-        LOG.info(hashedPassword);
 
         User newUser = User.builder()
                 .email(userRegisterRequest.getEmail())
@@ -68,6 +68,7 @@ public class UserServiceImpl implements UserService {
 
         String jwtToken = auth.sign(optionalUser.get());
         UserLoginResponse response = new UserLoginResponse(jwtToken);
+        LOG.info("test login");
 
         return response;
     }
