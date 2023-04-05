@@ -3,7 +3,7 @@ name: Build and Deploy Quarkus Project with Gradle
 on:
   push:
     branches:
-      - main
+      - master
 
 env:
   PROJECT_ID: senior-project-364818
