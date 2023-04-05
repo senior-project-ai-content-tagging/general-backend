@@ -21,10 +21,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup JDK 11
+    - name: Setup JDK 17
       uses: actions/setup-java@v2
       with:
-        java-version: 17
+        distribution: 17
 
     - name: Configure Docker
       uses: docker/login-action@v1
