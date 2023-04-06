@@ -40,6 +40,9 @@ jobs:
       run: |
         ./gradlew build -Dquarkus.container-image.build=true
 
+    - name: log show images
+      run: docker images
+
     - name: tag image
       run: docker tag runner/gcr.io/senior-project-364818/general-backend:1.0.0-SNAPSHOT ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
