@@ -3,17 +3,20 @@ package me.ponlawat.domain.user.internal;
 import me.ponlawat.domain.user.User;
 import me.ponlawat.domain.user.UserRepository;
 import me.ponlawat.domain.user.UserRole;
+import me.ponlawat.domain.user.dto.UserApiKeyResponse;
 import me.ponlawat.domain.user.dto.UserLoginRequest;
 import me.ponlawat.domain.user.dto.UserLoginResponse;
 import me.ponlawat.domain.user.dto.UserRegisterRequest;
 import me.ponlawat.domain.user.exception.UserAlreadyExistException;
 import me.ponlawat.domain.user.exception.UserUnauthorizedException;
-import me.ponlawat.infrastructure.auth.AuthToken;
+import me.ponlawat.infrastructure.auth.AuthContextImpl;
+import me.ponlawat.infrastructure.crypto.ApiKeyGenerator;
 import me.ponlawat.infrastructure.crypto.PasswordEncrypter;
 import me.ponlawat.infrastructure.provider.http.HttpErrorException;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
+import javax.persistence.EntityManager;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 
@@ -23,18 +26,23 @@ class UserServiceImplTest {
     UserServiceImpl underTest;
     UserRepository mockUserRepository;
     PasswordEncrypter mockPasswordEncrypter;
-    AuthToken mockAuth;
+    AuthContextImpl mockAuth;
+    ApiKeyGenerator mockApiKeyGenerator;
+    EntityManager mockEntityManager;
 
     @BeforeEach
     void setUp() {
         mockUserRepository = mock(UserRepository.class);
         mockPasswordEncrypter = mock(PasswordEncrypter.class);
-        mockAuth = mock(AuthToken.class);
+        mockAuth = mock(AuthContextImpl.class);
+        mockApiKeyGenerator = mock(ApiKeyGenerator.class);
+        mockEntityManager = mock(EntityManager.class);
 
         underTest = new UserServiceImpl();
         underTest.setUserRepository(mockUserRepository);
         underTest.setPasswordEncrypter(mockPasswordEncrypter);
         underTest.setAuth(mockAuth);
+        underTest.setApiKeyGenerator(mockApiKeyGenerator);
     }
 
     @Nested
@@ -63,7 +71,8 @@ class UserServiceImplTest {
                     "hashedPassword",
                     "testFirst",
                     "testLast",
-                    UserRole.MEMBER)));
+                    UserRole.MEMBER,
+                    null)));
 
             Assertions.assertEquals("test@email.com", result.getEmail());
             Assertions.assertEquals("testFirst", result.getFirstName());
@@ -176,5 +185,19 @@ class UserServiceImplTest {
                 underTest.profile(1L);
             });
         }
+    }
+
+    @Test
+    void testCreateApiKey() {
+        final String mockApiKey = "mockApiKey";
+        when(mockApiKeyGenerator.generate()).thenReturn(mockApiKey);
+        when(mockUserRepository.getEntityManager()).thenReturn(mockEntityManager);
+        User expectedUser = new User();
+        expectedUser.setApiKey(mockApiKey);
+
+        UserApiKeyResponse result = underTest.createApiKey(new User());
+
+        Assertions.assertEquals(mockApiKey, result.getApiKey());
+        verify(mockEntityManager, times(1)).merge(expectedUser);
     }
 }

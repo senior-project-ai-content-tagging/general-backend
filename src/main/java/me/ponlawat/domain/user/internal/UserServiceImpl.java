@@ -5,12 +5,14 @@ import me.ponlawat.domain.user.User;
 import me.ponlawat.domain.user.UserRepository;
 import me.ponlawat.domain.user.UserRole;
 import me.ponlawat.domain.user.UserService;
+import me.ponlawat.domain.user.dto.UserApiKeyResponse;
 import me.ponlawat.domain.user.dto.UserLoginRequest;
 import me.ponlawat.domain.user.dto.UserLoginResponse;
 import me.ponlawat.domain.user.dto.UserRegisterRequest;
 import me.ponlawat.domain.user.exception.UserAlreadyExistException;
 import me.ponlawat.domain.user.exception.UserUnauthorizedException;
-import me.ponlawat.infrastructure.auth.AuthToken;
+import me.ponlawat.infrastructure.auth.AuthContextImpl;
+import me.ponlawat.infrastructure.crypto.ApiKeyGenerator;
 import me.ponlawat.infrastructure.crypto.PasswordEncrypter;
 import me.ponlawat.infrastructure.provider.http.HttpErrorException;
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +32,9 @@ public class UserServiceImpl implements UserService {
     @Inject
     PasswordEncrypter passwordEncrypter;
     @Inject
-    AuthToken auth;
+    AuthContextImpl auth;
+    @Inject
+    ApiKeyGenerator apiKeyGenerator;
 
     private static final Logger LOG = LogManager.getLogger(UserServiceImpl.class);
 
@@ -81,5 +85,17 @@ public class UserServiceImpl implements UserService {
         }
 
         return optionalUser.get();
+    }
+
+    @Override
+    @Transactional
+    public UserApiKeyResponse createApiKey(User user) {
+        String apiKey = apiKeyGenerator.generate();
+        user.setApiKey(apiKey);
+        userRepository.getEntityManager().merge(user);
+
+        UserApiKeyResponse response = new UserApiKeyResponse(apiKey);
+
+        return response;
     }
 }

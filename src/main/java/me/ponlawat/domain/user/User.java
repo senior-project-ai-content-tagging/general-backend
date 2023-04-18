@@ -31,6 +31,8 @@ public class User {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    @Column(name = "api_key")
+    private String apiKey;
 
     @Override
     public boolean equals(Object o) {
@@ -42,6 +44,6 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return 13;
     }
 }

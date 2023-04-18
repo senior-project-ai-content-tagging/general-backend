@@ -2,25 +2,16 @@ package me.ponlawat.infrastructure.auth;
 
 import io.smallrye.jwt.build.Jwt;
 import me.ponlawat.domain.user.User;
-import me.ponlawat.domain.user.UserService;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.json.JsonNumber;
 import java.time.Duration;
 
 @RequestScoped
-public class JwtToken implements AuthToken {
+public class AuthContextImpl implements AuthContext {
+    public static final String UserIdKey = "userId";
 
-    @Inject
-    JsonWebToken jwt;
-    @Inject
-    UserService userService;
+    private User user;
 
-    public static String UserIdKey = "userId";
-
-    @Override
     public String sign(User user) {
         return Jwt.issuer("thai-content")
                 .upn(user.getEmail())
@@ -32,8 +23,10 @@ public class JwtToken implements AuthToken {
 
     @Override
     public User getUser() {
-        JsonNumber userId = jwt.getClaim(JwtToken.UserIdKey);
-        User user = userService.profile(userId.longValue());
-        return user;
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

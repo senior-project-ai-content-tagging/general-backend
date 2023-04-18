@@ -1,11 +1,12 @@
 package me.ponlawat.domain.user;
 
+import me.ponlawat.domain.user.dto.UserApiKeyResponse;
 import me.ponlawat.domain.user.dto.UserLoginRequest;
 import me.ponlawat.domain.user.dto.UserLoginResponse;
 import me.ponlawat.domain.user.dto.UserRegisterRequest;
-import me.ponlawat.infrastructure.auth.AuthToken;
+import me.ponlawat.infrastructure.auth.AuthContext;
+import me.ponlawat.infrastructure.auth.JwtRequired;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -18,7 +19,7 @@ public class UserResource {
     @Inject
     UserService userService;
     @Inject
-    AuthToken auth;
+    AuthContext auth;
 
     @POST
     @Path("/register")
@@ -33,11 +34,20 @@ public class UserResource {
     }
 
     @GET
-    @RolesAllowed({ "MEMBER", "ADMIN" })
+    @JwtRequired
     @Path("/profile")
     public User profile() {
         User user = auth.getUser();
 
         return user;
+    }
+
+    @POST
+    @JwtRequired
+    @Path("/generate-api-key")
+    public UserApiKeyResponse generateApiKey() {
+        User user = auth.getUser();
+
+        return userService.createApiKey(user);
     }
 }

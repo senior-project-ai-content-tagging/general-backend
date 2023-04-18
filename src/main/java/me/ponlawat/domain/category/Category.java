@@ -1,6 +1,9 @@
 package me.ponlawat.domain.category;
 
+import me.ponlawat.domain.content.Content;
+
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "categories")
@@ -41,4 +44,16 @@ public class Category {
         this.status = status;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return Objects.equals(id, category.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 13;
+    }
 }
