@@ -22,8 +22,8 @@ public class ContentDetailResponse {
     public static ContentDetailResponse fromContent(Content content) {
         return ContentDetailResponse.builder()
                 .id(content.getId())
-                .title(content.getTitle_th())
-                .content(content.getContent_th())
+                .title(content.getTitleTH())
+                .content(content.getContentTH())
                 .categories(content.getCategories().stream().map(category -> category.getName()).collect(Collectors.toList()))
                 .build();
     }

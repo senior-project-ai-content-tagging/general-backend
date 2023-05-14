@@ -1,5 +1,7 @@
 package me.ponlawat.infrastructure.auth;
 
+import lombok.Setter;
+import me.ponlawat.domain.content.exception.ContentNotFoundException;
 import me.ponlawat.domain.user.User;
 import me.ponlawat.domain.user.UserRepository;
 import me.ponlawat.domain.user.exception.UserUnauthorizedException;
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 @ApiKeyRequired
 @Provider
+@Setter
 public class ApiKeyRequiredFilter implements ContainerRequestFilter {
 
     @Inject

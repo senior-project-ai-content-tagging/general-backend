@@ -21,7 +21,7 @@ public class TicketResponse {
     public static TicketResponse fromTicket(Ticket ticket) {
         TicketResponse ticketResponse = new TicketResponse();
         ticketResponse.setId(ticket.getId());
-        ticketResponse.setTitle(ticket.getContent().getTitle_th());
+        ticketResponse.setTitle(ticket.getContent().getTitleTH());
         ticketResponse.setStatus(ticket.getStatus());
         ticketResponse.setCategories(ticket.getContent().getCategories().stream().map(category -> category.getName()).toList());
         ticketResponse.setContentId(ticket.getContent().getId());

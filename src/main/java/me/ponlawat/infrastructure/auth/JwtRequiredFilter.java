@@ -5,32 +5,33 @@ import me.ponlawat.domain.user.UserService;
 import me.ponlawat.domain.user.exception.UserUnauthorizedException;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.interceptor.Interceptor;
 import javax.json.JsonNumber;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 
 @JwtRequired
 @Provider
-public class AuthFilter implements ContainerRequestFilter {
+@Priority(Interceptor.Priority.APPLICATION)
+public class JwtRequiredFilter implements ContainerRequestFilter {
 
     @Inject
     JsonWebToken jwt;
     @Inject
     UserService userService;
     @Inject
-    AuthContextImpl auth;
+    AuthContextImpl authContext;
 
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
         try {
             JsonNumber userId = jwt.getClaim(AuthContextImpl.UserIdKey);
             User user = userService.profile(userId.longValue());
 
-            auth.setUser(user);
+            authContext.setUser(user);
         } catch (Exception e) {
             System.out.println(e);
             throw new UserUnauthorizedException();

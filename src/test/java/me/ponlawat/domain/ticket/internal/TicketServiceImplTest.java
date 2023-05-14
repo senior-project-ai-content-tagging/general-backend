@@ -7,7 +7,7 @@ import me.ponlawat.domain.ticket.TicketRepository;
 import me.ponlawat.domain.ticket.TicketStatus;
 import me.ponlawat.domain.ticket.TicketType;
 import me.ponlawat.domain.ticket.dto.TicketWeblinkRequest;
-import me.ponlawat.domain.ticket.dto.TicketWeblinkResponse;
+import me.ponlawat.domain.ticket.dto.TicketRequestResponse;
 import me.ponlawat.domain.user.User;
 import org.junit.jupiter.api.*;
 
@@ -46,7 +46,7 @@ class TicketServiceImplTest {
             Content expectedContent = new Content();
             expectedContent.setOriginalUrl(TARGET_URL);
 
-            TicketWeblinkResponse result = underTest.submitWeblink(user, ticketWeblinkRequest);
+            TicketRequestResponse result = underTest.submitWeblink(user, ticketWeblinkRequest);
 
             verify(mockContentRepository, times(1)).persistAndFlush(expectedContent);
             verify(mockTicketRepository, times(1)).persist(new Ticket(

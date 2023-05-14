@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import me.ponlawat.domain.category.Category;
-import me.ponlawat.domain.user.User;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -29,18 +28,18 @@ public class Content {
     private String originalUrl;
 
     @Column(name = "title_th")
-    private String title_th;
+    private String titleTH;
 
     @Column(name = "content_th")
     @Type(type = "org.hibernate.type.TextType")
-    private String content_th;
+    private String contentTH;
 
     @Column(name = "title_en")
-    private String title_en;
+    private String titleEN;
 
     @Column(name = "content_en")
     @Type(type = "org.hibernate.type.TextType")
-    private String content_en;
+    private String contentEN;
 
     @Column(name = "identifier", length = 64)
     private String identifier;

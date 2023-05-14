@@ -8,7 +8,7 @@ import me.ponlawat.domain.ticket.TicketStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class TicketWeblinkResponse {
+public class TicketRequestResponse {
     public Long ticketId;
     public TicketStatus status;
 }

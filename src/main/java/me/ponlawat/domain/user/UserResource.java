@@ -4,6 +4,7 @@ import me.ponlawat.domain.user.dto.UserApiKeyResponse;
 import me.ponlawat.domain.user.dto.UserLoginRequest;
 import me.ponlawat.domain.user.dto.UserLoginResponse;
 import me.ponlawat.domain.user.dto.UserRegisterRequest;
+import me.ponlawat.infrastructure.auth.AdminRequired;
 import me.ponlawat.infrastructure.auth.AuthContext;
 import me.ponlawat.infrastructure.auth.JwtRequired;
 

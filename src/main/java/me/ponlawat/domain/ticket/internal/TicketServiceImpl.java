@@ -1,13 +1,11 @@
 package me.ponlawat.domain.ticket.internal;
 
-import io.quarkus.logging.Log;
 import lombok.Setter;
 import me.ponlawat.domain.content.Content;
 import me.ponlawat.domain.content.ContentRepository;
 import me.ponlawat.domain.ticket.*;
-import me.ponlawat.domain.ticket.dto.TicketSubmitWeblinkPubSub;
-import me.ponlawat.domain.ticket.dto.TicketWeblinkRequest;
-import me.ponlawat.domain.ticket.dto.TicketWeblinkResponse;
+import me.ponlawat.domain.ticket.dto.*;
+import me.ponlawat.domain.ticket.publisher.SubmitContentPublisher;
 import me.ponlawat.domain.ticket.publisher.SubmitWeblinkPublisher;
 import me.ponlawat.domain.user.User;
 import org.jboss.logging.Logger;
@@ -27,24 +25,21 @@ public class TicketServiceImpl implements TicketService {
     ContentRepository contentRepository;
     @Inject
     SubmitWeblinkPublisher submitWeblinkPublisher;
+    @Inject
+    SubmitContentPublisher submitContentPublisher;
 
     private static final Logger LOG = Logger.getLogger(TicketServiceImpl.class);
 
     @Override
     @Transactional
-    public TicketWeblinkResponse submitWeblink(User user, TicketWeblinkRequest ticketWeblinkRequest) {
+    public TicketRequestResponse submitWeblink(User user, TicketWeblinkRequest ticketWeblinkRequest) {
         Content content = new Content();
         content.setOriginalUrl(ticketWeblinkRequest.getUrl());
         contentRepository.persistAndFlush(content);
 
-        Ticket ticket = new Ticket();
-        ticket.setContent(content);
-        ticket.setUser(user);
-        ticket.setStatus(TicketStatus.OPEN);
-        ticket.setType(TicketType.USER);
-        ticketRepository.persist(ticket);
+        Ticket ticket = createTicket(user, content);
 
-        TicketWeblinkResponse response = new TicketWeblinkResponse(ticket.getId(), ticket.getStatus());
+        TicketRequestResponse response = new TicketRequestResponse(ticket.getId(), ticket.getStatus());
 
         TicketSubmitWeblinkPubSub message = new TicketSubmitWeblinkPubSub(ticket.getId(), ticketWeblinkRequest.getUrl());
         try {
@@ -57,7 +52,40 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
+    public TicketRequestResponse submitContent(User user, TicketContentRequest ticketContentRequest) {
+        Content content = new Content();
+        content.setTitleTH(ticketContentRequest.getTitle());
+        content.setContentTH(ticketContentRequest.getContent());
+        contentRepository.persistAndFlush(content);
+
+        Ticket ticket = createTicket(user, content);
+
+        TicketRequestResponse response = new TicketRequestResponse(ticket.getId(), ticket.getStatus());
+
+        TicketSubmitContentPubSub message = new TicketSubmitContentPubSub(ticket.getId());
+        try {
+            submitContentPublisher.publish(message);
+        } catch (Exception e) {
+            LOG.warnv("cannot publish message {0}", e);
+        }
+
+        return response;
+    }
+
+    @Override
     public List<Ticket> getTicketByUser(User user) {
         return ticketRepository.findByUserId(user.getId());
+    }
+
+    private Ticket createTicket(User user, Content content) {
+        Ticket ticket = new Ticket();
+        ticket.setContent(content);
+        ticket.setUser(user);
+        ticket.setStatus(TicketStatus.OPEN);
+        ticket.setType(TicketType.USER);
+        ticketRepository.persist(ticket);
+
+        return ticket;
     }
 }
