@@ -9,6 +9,6 @@ import java.util.List;
 @ApplicationScoped
 public class TicketRepository implements PanacheRepository<Ticket> {
     public List<Ticket> findByUserId(long userId) {
-        return list("user_id", userId, Sort.by("id"));
+        return list("user_id", Sort.by("id"), userId);
     }
 }
