@@ -1,5 +1,6 @@
 package me.ponlawat.domain.ticket;
 
+import me.ponlawat.domain.content.dto.ContentDetailResponse;
 import me.ponlawat.domain.ticket.dto.TicketContentRequest;
 import me.ponlawat.domain.ticket.dto.TicketResponse;
 import me.ponlawat.domain.ticket.dto.TicketWeblinkRequest;
@@ -61,5 +62,12 @@ public class TicketResource {
 
         return ticketService.getTicketByUser(user).stream().map(ticket -> TicketResponse.fromTicket(ticket))
                 .collect(Collectors.toList());
+    }
+
+    @GET
+    @JwtRequired
+    @Path("/{id}")
+    public TicketResponse getTicketById(@PathParam("id") Long id) {
+        return TicketResponse.fromTicket(ticketService.getTicketById(id));
     }
 }

@@ -3,8 +3,10 @@ package me.ponlawat.domain.ticket.internal;
 import lombok.Setter;
 import me.ponlawat.domain.content.Content;
 import me.ponlawat.domain.content.ContentRepository;
+import me.ponlawat.domain.content.exception.ContentNotFoundException;
 import me.ponlawat.domain.ticket.*;
 import me.ponlawat.domain.ticket.dto.*;
+import me.ponlawat.domain.ticket.exception.TicketNotFoundException;
 import me.ponlawat.domain.ticket.publisher.SubmitContentPublisher;
 import me.ponlawat.domain.ticket.publisher.SubmitWeblinkPublisher;
 import me.ponlawat.domain.user.User;
@@ -14,6 +16,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 @Setter
@@ -76,6 +79,17 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<Ticket> getTicketByUser(User user) {
         return ticketRepository.findByUserId(user.getId());
+    }
+
+    @Override
+    public Ticket getTicketById(Long id) {
+        Optional<Ticket> ticketOptional = ticketRepository.findByIdOptional(id);
+
+        if (ticketOptional.isEmpty()) {
+            throw new TicketNotFoundException(id);
+        }
+
+        return ticketOptional.get();
     }
 
     private Ticket createTicket(User user, Content content) {

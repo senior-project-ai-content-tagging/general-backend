@@ -11,4 +11,5 @@ public interface TicketService {
     public TicketRequestResponse submitWeblink(User user, TicketWeblinkRequest ticketWeblinkRequest);
     public TicketRequestResponse submitContent(User user, TicketContentRequest ticketContentRequest);
     public List<Ticket> getTicketByUser(User user);
+    public Ticket getTicketById(Long id);
 }
