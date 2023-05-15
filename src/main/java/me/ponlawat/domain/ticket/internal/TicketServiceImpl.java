@@ -39,7 +39,7 @@ public class TicketServiceImpl implements TicketService {
 
         Ticket ticket = createTicket(user, content);
 
-        TicketRequestResponse response = new TicketRequestResponse(ticket.getId(), ticket.getStatus());
+        TicketRequestResponse response = new TicketRequestResponse(ticket.getId(), ticket.getStatus(), content.getId());
 
         TicketSubmitWeblinkPubSub message = new TicketSubmitWeblinkPubSub(ticket.getId(), ticketWeblinkRequest.getUrl());
         try {
@@ -61,7 +61,7 @@ public class TicketServiceImpl implements TicketService {
 
         Ticket ticket = createTicket(user, content);
 
-        TicketRequestResponse response = new TicketRequestResponse(ticket.getId(), ticket.getStatus());
+        TicketRequestResponse response = new TicketRequestResponse(ticket.getId(), ticket.getStatus(), content.getId());
 
         TicketSubmitContentPubSub message = new TicketSubmitContentPubSub(ticket.getId());
         try {

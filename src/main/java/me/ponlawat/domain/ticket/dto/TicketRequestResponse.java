@@ -11,4 +11,5 @@ import me.ponlawat.domain.ticket.TicketStatus;
 public class TicketRequestResponse {
     public Long ticketId;
     public TicketStatus status;
+    public Long contentId;
 }

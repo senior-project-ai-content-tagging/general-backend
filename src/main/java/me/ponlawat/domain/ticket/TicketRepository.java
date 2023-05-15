@@ -1,6 +1,7 @@
 package me.ponlawat.domain.ticket;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Sort;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
@@ -8,6 +9,6 @@ import java.util.List;
 @ApplicationScoped
 public class TicketRepository implements PanacheRepository<Ticket> {
     public List<Ticket> findByUserId(long userId) {
-        return list("user_id", userId);
+        return list("user_id", userId, Sort.by("id"));
     }
 }

@@ -58,6 +58,7 @@ class TicketServiceImplTest {
             ));
             Assertions.assertEquals(TARGET_URL, expectedContent.getOriginalUrl());
             Assertions.assertEquals(TicketStatus.OPEN, result.getStatus());
+            Assertions.assertEquals(expectedContent.getId(), result.getContentId());
         }
     }
 }
