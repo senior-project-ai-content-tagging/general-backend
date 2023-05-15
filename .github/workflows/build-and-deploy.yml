@@ -60,3 +60,13 @@ jobs:
 
     - name: redeploy cloud run
       run: gcloud run deploy ${{ env.SERVICE_NAME }} --project ${{ env.PROJECT_ID }} --region ${{ env.REGION }} --image ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} --traffic production=100
+
+    - name: Get new revision
+      id: get_revision
+      run: |
+        revision=$(gcloud run revisions list --service=${{ env.SERVICE_NAME }} --platform=managed --region=${{ env.REGION }} --format="value(metadata.name)")
+        echo "NEW_REVISION=$revision" >> $GITHUB_ENV
+
+    - name: Redeploy Cloud Run
+      run: |
+        gcloud run services update-traffic ${{ env.SERVICE_NAME }} --project ${{ env.PROJECT_ID }} --region ${{ env.REGION }} --to-revisions=${{ env.NEW_REVISION }}=100
