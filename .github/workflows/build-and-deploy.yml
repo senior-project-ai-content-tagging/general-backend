@@ -59,7 +59,7 @@ jobs:
       uses: 'google-github-actions/setup-gcloud@v1'
 
     - name: redeploy cloud run
-      run: gcloud run deploy ${{ env.SERVICE_NAME }} --project ${{ env.PROJECT_ID }} --region ${{ env.REGION }} --image ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} --traffic production=100
+      run: gcloud run deploy ${{ env.SERVICE_NAME }} --project ${{ env.PROJECT_ID }} --region ${{ env.REGION }} --image ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
     - name: Get new revision
       id: get_revision
