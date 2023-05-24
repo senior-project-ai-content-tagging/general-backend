@@ -1,5 +1,6 @@
 package me.ponlawat.domain.content.internal;
 
+import lombok.Setter;
 import me.ponlawat.domain.content.Content;
 import me.ponlawat.domain.content.ContentRepository;
 import me.ponlawat.domain.content.ContentService;
@@ -10,6 +11,7 @@ import javax.inject.Inject;
 import java.util.Optional;
 
 @ApplicationScoped
+@Setter
 public class ContentServiceImpl implements ContentService {
 
     @Inject

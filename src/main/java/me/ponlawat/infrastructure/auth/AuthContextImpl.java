@@ -2,6 +2,7 @@ package me.ponlawat.infrastructure.auth;
 
 import io.smallrye.jwt.build.Jwt;
 import me.ponlawat.domain.user.User;
+import me.ponlawat.domain.user.exception.UserUnauthorizedException;
 
 import javax.enterprise.context.RequestScoped;
 import java.time.Duration;
@@ -23,6 +24,10 @@ public class AuthContextImpl implements AuthContext {
 
     @Override
     public User getUser() {
+        if (this.user == null) {
+            throw new UserUnauthorizedException();
+        }
+
         return this.user;
     }
 

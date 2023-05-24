@@ -1,15 +1,14 @@
 package me.ponlawat.domain.user.internal;
 
+import io.quarkus.panache.common.Sort;
 import lombok.Setter;
 import me.ponlawat.domain.user.User;
 import me.ponlawat.domain.user.UserRepository;
 import me.ponlawat.domain.user.UserRole;
 import me.ponlawat.domain.user.UserService;
-import me.ponlawat.domain.user.dto.UserApiKeyResponse;
-import me.ponlawat.domain.user.dto.UserLoginRequest;
-import me.ponlawat.domain.user.dto.UserLoginResponse;
-import me.ponlawat.domain.user.dto.UserRegisterRequest;
+import me.ponlawat.domain.user.dto.*;
 import me.ponlawat.domain.user.exception.UserAlreadyExistException;
+import me.ponlawat.domain.user.exception.UserNotFoundException;
 import me.ponlawat.domain.user.exception.UserUnauthorizedException;
 import me.ponlawat.infrastructure.auth.AuthContextImpl;
 import me.ponlawat.infrastructure.crypto.ApiKeyGenerator;
@@ -20,8 +19,10 @@ import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -97,5 +98,50 @@ public class UserServiceImpl implements UserService {
         UserApiKeyResponse response = new UserApiKeyResponse(apiKey);
 
         return response;
+    }
+
+    @Override
+    public List<User> listUser() {
+        return userRepository.listAll(Sort.by("id"));
+    }
+
+    @Override
+    public User getUser(long id) {
+        Optional<User> optionalUser = userRepository.findByIdOptional(id);
+        if (optionalUser.isEmpty()) {
+            throw new UserNotFoundException(id);
+        }
+
+        return optionalUser.get();
+    }
+
+    @Override
+    @Transactional
+    public void removeUser(long id) {
+        Optional<User> optionalUser = userRepository.findByIdOptional(id);
+        if (optionalUser.isEmpty()) {
+            throw new UserNotFoundException(id);
+        }
+
+        userRepository.delete(optionalUser.get());
+    }
+
+    @Override
+    @Transactional
+    public User updateUser(long id, UserEditRequest userEditRequest) {
+        Optional<User> optionalUser = userRepository.findByIdOptional(id);
+        if (optionalUser.isEmpty()) {
+            throw new UserNotFoundException(id);
+        }
+
+        User user = optionalUser.get();
+        user.setFirstName(userEditRequest.getFirstName());
+        user.setLastName(userEditRequest.getLastName());
+        user.setApiKey(userEditRequest.getApiKey());
+        user.setRole(userEditRequest.getRole());
+
+        userRepository.persist(user);
+
+        return user;
     }
 }

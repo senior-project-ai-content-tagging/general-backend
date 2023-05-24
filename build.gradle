@@ -9,6 +9,9 @@ repositories {
 }
 
 dependencies {
+    implementation 'io.quarkus:quarkus-rest-client'
+    implementation 'io.quarkus:quarkus-rest-client-jackson'
+    implementation 'io.quarkiverse.googlecloudservices:quarkus-google-cloud-storage'
     implementation 'io.quarkiverse.loggingjson:quarkus-logging-json:2.0.0'
     implementation 'io.quarkiverse.googlecloudservices:quarkus-google-cloud-pubsub'
     implementation enforcedPlatform("${quarkusPlatformGroupId}:quarkus-google-cloud-services-bom:${quarkusPlatformVersion}")
@@ -25,6 +28,8 @@ dependencies {
     implementation 'io.quarkus:quarkus-smallrye-jwt-build'
     implementation 'de.mkammerer:argon2-jvm:2.11'
     implementation("org.jboss.logmanager:log4j2-jboss-logmanager")
+    implementation 'com.google.cloud:google-cloud-storage:2.1.1'
+    implementation 'org.jboss.resteasy:resteasy-multipart-provider:6.2.4.Final'
     compileOnly 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
