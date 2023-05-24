@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -49,13 +48,14 @@ public class UserServiceImpl implements UserService {
         }
 
         String hashedPassword = passwordEncrypter.hash(userRegisterRequest.getPassword());
-
+        String apiKey = apiKeyGenerator.generate();
         User newUser = User.builder()
                 .email(userRegisterRequest.getEmail())
                 .password(hashedPassword)
                 .firstName(userRegisterRequest.getFirstName())
                 .lastName(userRegisterRequest.getLastName())
                 .role(UserRole.MEMBER)
+                .apiKey(apiKey)
                 .build();
 
         userRepository.persist(newUser);
