@@ -11,4 +11,8 @@ public class TicketRepository implements PanacheRepository<Ticket> {
     public List<Ticket> findByUserId(long userId) {
         return list("user_id", Sort.by("id"), userId);
     }
+
+    public long countByStatus(TicketStatus status) {
+        return count("status", status);
+    }
 }

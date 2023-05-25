@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
     public User register(UserRegisterRequest userRegisterRequest) {
         Optional<User> optionalUser = userRepository.findByEmail(userRegisterRequest.getEmail());
         if (optionalUser.isPresent()) {
-            LOG.info("User already exist");
             throw new UserAlreadyExistException();
         }
 
@@ -59,7 +58,6 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userRepository.persist(newUser);
-        LOG.info("User registration success");
         return newUser;
     }
 
@@ -73,7 +71,6 @@ public class UserServiceImpl implements UserService {
 
         String jwtToken = auth.sign(optionalUser.get());
         UserLoginResponse response = new UserLoginResponse(jwtToken);
-        LOG.info("test login");
 
         return response;
     }
