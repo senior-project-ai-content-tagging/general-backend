@@ -12,4 +12,5 @@ public interface TicketService {
     public TicketRequestResponse submitContent(User user, TicketContentRequest ticketContentRequest);
     public List<Ticket> getTicketByUser(User user);
     public Ticket getTicketById(Long id);
+    public void removeTicket(long id);
 }

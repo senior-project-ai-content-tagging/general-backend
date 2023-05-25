@@ -102,4 +102,15 @@ public class TicketServiceImpl implements TicketService {
 
         return ticket;
     }
+
+    @Override
+    @Transactional
+    public void removeTicket(long id) {
+        Optional<Ticket> optionalTicket = ticketRepository.findByIdOptional(id);
+        if (optionalTicket.isEmpty()) {
+            throw new TicketNotFoundException(id);
+        }
+
+        ticketRepository.delete(optionalTicket.get());
+    }
 }
