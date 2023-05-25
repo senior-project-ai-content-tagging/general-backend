@@ -3,7 +3,6 @@ package me.ponlawat.domain.admin.internal;
 import io.quarkus.panache.common.Sort;
 import me.ponlawat.domain.admin.AdminDashboardService;
 import me.ponlawat.domain.admin.dto.AdminStatusResponse;
-import me.ponlawat.domain.admin.dto.AdminTicketResponse;
 import me.ponlawat.domain.ticket.Ticket;
 import me.ponlawat.domain.ticket.TicketRepository;
 import me.ponlawat.domain.ticket.TicketStatus;

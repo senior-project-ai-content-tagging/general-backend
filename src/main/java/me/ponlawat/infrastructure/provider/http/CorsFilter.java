@@ -17,9 +17,10 @@ public class CorsFilter implements ContainerResponseFilter {
     static {
         ALLOWED_ORIGINS.add("http://karnkarn.local:3000");
         ALLOWED_ORIGINS.add("http://localhost:3000");
+        ALLOWED_ORIGINS.add("https://ai-thai-content.web.app");
     }
 
-    private static final String ALLOWED_METHODS = "GET, POST, PUT, DELETE, OPTIONS, HEAD";
+    private static final String ALLOWED_METHODS = "GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH";
     private static final String ALLOWED_HEADERS = "Origin, X-Requested-With, Content-Type, Accept, Authorization";
 
     @Override
